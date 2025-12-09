@@ -1,6 +1,10 @@
+root_dir: ".." # root directory = parent directory
+
 data:
-  train_dir: "data/model/training"
-  validation_dir: "data/model/validation"
+  train_dir_notumor: "data/model/training/notumor"
+  train_dir_tumor: "data/model/training/tumor"
+  validation_dir_notumor: "data/model/validation/notumor"
+  validation_dir_tumor: "data/model/validation/tumor"
   image_height: 256
   image_width: 256
   color_mode: "rgb"
@@ -9,11 +13,9 @@ data:
 
 model:
   custom:
-    conv_filters_1: 16
-    conv_filters_2: 32
+    conv_filters: [16, 32]
     dropout_pct: 0.3
-    dense_units_1: 128
-    dense_units_2: 64
+    dense_units: [128, 64]
     saved_model_dir: "saved_models/custom_model.h5"
     logs_dir: "logs/custom_model_logs.csv"
   transfer_learning:
@@ -22,7 +24,7 @@ model:
     dropout_pct: 0.3
     dense_units_1: 32
     saved_model_dir: "saved_model/transfer_learning_model.h5"
-    logs_dir: "logs/transfer_learning_model.h5"
+    logs_dir: "logs/transfer_learning_model_logs.csv"
 
 training:
   epochs: 10
