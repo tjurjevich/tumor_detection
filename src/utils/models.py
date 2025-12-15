@@ -1,5 +1,5 @@
 import tensorflow as tf
-from tensorflow.keras.layers import Rescaling, Dense, Conv2D, MaxPooling2D, AvgPooling2D, Flatten, Dropout, GlobalMaxPooling2D, GlobalAveragePooling2D
+from tensorflow.keras.layers import Rescaling, Dense, Conv2D, MaxPooling2D, AveragePooling2D, Flatten, Dropout, GlobalMaxPooling2D, GlobalAveragePooling2D
 from tensorflow.keras.applications import ResNet50, DenseNet121
 from typing import Literal, Iterable
 
@@ -24,10 +24,10 @@ class CustomTumorClassifier(tf.keras.Model):
         if not self.single_conv_block:
             for _, num in enumerate(conv_layer_filters):
                 self.conv_block.append(Conv2D(num, (3,3), activation = 'relu'))
-                self.conv_block.append(MaxPooling2D() if pool_type == 'max' else AvgPooling2D())
+                self.conv_block.append(MaxPooling2D() if pool_type == 'max' else AveragePooling2D())
         if self.single_conv_block:
                 self.conv_block.append(Conv2D(num, (3,3), activation = 'relu'))
-                self.conv_block.append(MaxPooling2D() if pool_type == 'max' else AvgPooling2D())
+                self.conv_block.append(MaxPooling2D() if pool_type == 'max' else AveragePooling2D())
 
         # Define Dropout, Flatten
         self.dropout = Dropout(dropout_pct)
