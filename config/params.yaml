@@ -14,6 +14,7 @@ model:
     conv_filters: [16, 32]
     dropout_pct: 0.3
     dense_units: [128, 64]
+    pool_type: "max"
     saved_model_dir: "saved_models/custom_model.h5"
   transfer_learning:
     base_model: "densenet"
@@ -23,9 +24,11 @@ model:
     saved_model_dir: "saved_model/transfer_learning_model.h5"
 
 training:
-  epochs: 10
-  learning_rate_min: 1e-6
+  epochs: 100
+  batch_size: 64
   optimizer: "adam"
   loss_fn: "binary_crossentropy"
   metrics: ["accuracy","recall","precision"]
+  callbacks:
+
 

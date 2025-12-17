@@ -1,0 +1,11 @@
+2025-12-16 20:38:45,278 - root - INFO - Loading original images...
+2025-12-16 20:38:45,462 - root - INFO - Original images loaded successfully.
+2025-12-16 20:38:45,462 - root - INFO - Transforming and augmenting data for model training...
+2025-12-16 20:38:45,589 - root - INFO - Training and validation datasets successfully created.
+2025-12-16 20:38:45,589 - root - INFO - Callbacks defined
+2025-12-16 20:38:45,589 - root - INFO - Creating model definition
+2025-12-16 20:38:45,593 - root - INFO - Compiling model
+2025-12-16 20:38:45,596 - root - INFO - Beginning model training...
+2025-12-16 20:50:08,416 - root - INFO - Model training complete
+2025-12-16 20:50:08,416 - absl - WARNING - You are saving your model as an HDF5 file via `model.save()` or `keras.saving.save_model(model)`. This file format is considered legacy. We recommend using instead the native Keras format, e.g. `model.save('my_model.keras')` or `keras.saving.save_model(model, 'my_model.keras')`. 
+2025-12-16 20:50:08,475 - root - INFO - Model architecturs and weights saved to saved_models/custom_model.h5
