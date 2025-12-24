@@ -35,7 +35,7 @@ def create_model_datasets(train_tumor, train_notumor, validation_tumor, validati
             if random_val() > 0.5:
                 image = random_flip_up_down(image)
             if random_val() > 0.5:
-                image = rot90(random_turns())
+                image = rot90(image, k = random_turns())
             if random_val() > 0.8:
                 image = random_contrast(image, 0.2, 0.5)
             if random_val() > 0.8:

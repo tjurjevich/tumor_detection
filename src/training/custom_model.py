@@ -52,9 +52,9 @@ logging.info("Training and validation datasets successfully created.")
 # Define callbacks to use during traning
 early_stopping = EarlyStopping(
         monitor = "val_loss",
-        min_delta = 0.001,
-        patience = 5,
-        start_from_epoch = 5
+        min_delta = params["training"]["callbacks"]["early_stopping"]["min_delta"],
+        patience = params["training"]["callbacks"]["early_stopping"]["patience"],
+        start_from_epoch = params["training"]["callbacks"]["early_stopping"]["epoch_start"],
         verbose = 1,    
         mode = "min",
         restore_best_weights = True
@@ -62,9 +62,9 @@ early_stopping = EarlyStopping(
 
 lr_reducer = ReduceLROnPlateau(
     monitor = "val_loss",
-    factor = 0.1,
-    patience = 5,
-    min_lr = 1e-6
+    factor = params["training"]["callbacks"]["lr_plateau"]["factor"],
+    patience = params["training"]["callbacks"]["lr_plateau"]["patience"],
+    min_lr = params["training"]["callbacks"]["lr_plateau"]["min_lr"]
 )
 
 csv_logger = CSVLogger(
