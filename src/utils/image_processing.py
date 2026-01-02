@@ -75,3 +75,8 @@ def create_model_datasets(train_tumor, train_notumor, validation_tumor, validati
     final_validation = final_validation.prefetch(buffer_size = AUTOTUNE)
 
     return final_train, final_validation
+
+def resize_test_image(path, img_height, img_width):
+    raw_img = tf.keras.preprocessing.image.load_img(path)
+    resized_img = resize(raw_img, size = (img_height, img_width), method = 'bilinear')
+    return resized_img

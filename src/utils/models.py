@@ -5,6 +5,7 @@ from typing import Literal, Iterable
 
 
 # Class definition for custom model
+@saving.register_keras_serializable()
 class CustomTumorClassifier(tf.keras.Model):
     def __init__(self,
         conv_layer_filters: int | Iterable[int] = [16, 32],
@@ -72,10 +73,11 @@ class CustomTumorClassifier(tf.keras.Model):
 
 # Class definition for transfer learning tumor classifier
 # Transfer learning classifier method
+@saving.register_keras_serializable()
 class TLTumorClassifier(tf.keras.Model):
     def __init__(self, 
-        image_height: int = 224, 
-        image_width: int = 224, 
+        image_height: int = 256, 
+        image_width: int = 256, 
         image_channels: int = 3, 
         base_model: Literal['resnet','densenet'] = 'resnet', 
         pool_type: Literal['max','avg'] = 'max',
@@ -133,7 +135,7 @@ class TLTumorClassifier(tf.keras.Model):
 
         # 4. 1+ Dense layers
         if self.single_dense_layer:
-            x = layer(x)
+            x = self.dense_layer(x)
         if not self.single_dense_layer: 
             for layer in self.dense_block:
                 x = layer(x)

@@ -1,5 +1,5 @@
 from src.utils.image_processing import load_original_images, create_model_datasets
-from src.utils.models import CustomTumorClassifier, TLTumorClassifier
+from src.utils.models import CustomTumorClassifier
 from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau, CSVLogger
 import tensorflow as tf
 import logging
@@ -105,5 +105,5 @@ model_history = model.fit(
 logging.info("Model training complete")
 
 
-model.save(params["model"]["custom"]["saved_model_dir"])
+model.save(params["model"]["custom"]["saved_model_dir"]) # save the model if desired
 logging.info(f"Model architecturs and weights saved to {params["model"]["custom"]["saved_model_dir"]}")
