@@ -1,0 +1,10 @@
+2026-01-02 19:57:13,987 - root - INFO - Loading original images...
+2026-01-02 19:57:14,168 - root - INFO - Original images loaded successfully.
+2026-01-02 19:57:14,168 - root - INFO - Transforming and augmenting data for model training...
+2026-01-02 19:57:14,296 - root - INFO - Training and validation datasets successfully created.
+2026-01-02 19:57:14,297 - root - INFO - Callbacks defined
+2026-01-02 19:57:14,297 - root - INFO - Creating model definition
+2026-01-02 19:57:14,300 - root - INFO - Compiling model
+2026-01-02 19:57:14,302 - root - INFO - Beginning model training...
+2026-01-02 20:08:45,309 - root - INFO - Model training complete
+2026-01-02 20:08:45,384 - root - INFO - Model architecturs and weights saved to saved_models/custom_model.keras

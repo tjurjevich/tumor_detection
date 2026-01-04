@@ -5,15 +5,20 @@ from typing import Literal, Iterable
 
 
 # Class definition for custom model
-@saving.register_keras_serializable()
+@tf.keras.utils.register_keras_serializable()
 class CustomTumorClassifier(tf.keras.Model):
     def __init__(self,
         conv_layer_filters: int | Iterable[int] = [16, 32],
         pool_type: Literal['max','avg'] = 'max',
         dense_layer_units: int | Iterable[int] = [128, 64],
-        dropout_pct: float = 0.3
+        dropout_pct: float = 0.3,
+        **kwargs
     ):
         super().__init__()
+        self.conv_layer_filters = conv_layer_filters
+        self.pool_type = pool_type 
+        self.dense_layer_units = dense_layer_units 
+        self.dropout_pct = dropout_pct
         self.single_conv_block = isinstance(conv_layer_filters, int)
         self.single_dense_layer = isinstance(dense_layer_units, int)
 
@@ -71,9 +76,19 @@ class CustomTumorClassifier(tf.keras.Model):
 
         return output
 
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            "conv_layer_filters": self.conv_layer_filters,
+            "pool_type": self.pool_type,
+            "dense_layer_units": self.dense_layer_units,
+            "dropout_pct": self.dropout_pct
+        })
+        return config
+
 # Class definition for transfer learning tumor classifier
 # Transfer learning classifier method
-@saving.register_keras_serializable()
+@tf.keras.utils.register_keras_serializable()
 class TLTumorClassifier(tf.keras.Model):
     def __init__(self, 
         image_height: int = 256, 
@@ -82,9 +97,17 @@ class TLTumorClassifier(tf.keras.Model):
         base_model: Literal['resnet','densenet'] = 'resnet', 
         pool_type: Literal['max','avg'] = 'max',
         dense_layer_units: int | Iterable[int] = 32,
-        dropout_pct: float = 0.3
+        dropout_pct: float = 0.3,
+        **kwargs
     ):
         super().__init__()
+        self.image_height = image_height
+        self.image_width = image_width 
+        self.image_channels = image_channels
+        self.base_model = self.base_model 
+        self.pool_type = pool_type 
+        self.dense_layer_units = dense_layer_units 
+        self.dropout_pct = dropout_pct
         self.single_dense_layer = isinstance(dense_layer_units, int)
 
         # Base model assignment
@@ -147,3 +170,15 @@ class TLTumorClassifier(tf.keras.Model):
         output = self.classifier(x)
         return output
 
+    def get_config(self):
+        config = super().get_config()
+        config.update({
+            "image_height": self.image_height,
+            "image_width": self.image_width,
+            "image_channels": self.image_channels,
+            "base_models": self.base_model,
+            "pool_type": self.pool_type,
+            "dense_layer_units": self.dense_layer_units,
+            "dropout_pct": self.dropout_pct
+        })
+        return config

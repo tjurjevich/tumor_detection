@@ -10,10 +10,11 @@ def load_original_images(paths: dict, color_mode: Literal['grayscale','rgb']):
     if not req_path_keys.issubset(paths.keys()):
         raise ValueError(f"1 or more of the following path names are missing from the provided path dictionary: {', '.join(req_path_keys)}")
 
-    num_train_tumor = len(os.listdir(paths['train_tumor']))
-    num_train_notumor = len(os.listdir(paths['train_notumor']))
-    num_validation_tumor = len(os.listdir(paths['validation_tumor']))
-    num_validation_notumor = len(os.listdir(paths['validation_notumor']))
+    num_train_tumor = len([file for file in os.listdir(paths['train_tumor']) if '.jpg' in file])
+    num_train_notumor = len([file for file in os.listdir(paths['train_notumor']) if '.jpg' in file])
+    num_validation_tumor = len([file for file in os.listdir(paths['validation_tumor']) if '.jpg' in file])
+    num_validation_notumor = len([file for file in os.listdir(paths['validation_notumor']) if '.jpg' in file])
+    print(num_train_tumor, num_train_notumor, num_validation_tumor, num_validation_notumor)
     
     train_tumor = image_dataset_from_directory(directory = paths['train_tumor'], color_mode = color_mode, labels = [1.0]*num_train_tumor)
     train_notumor = image_dataset_from_directory(directory = paths['train_notumor'], color_mode = color_mode, labels = [0.0]*num_train_notumor)
@@ -55,7 +56,7 @@ def create_model_datasets(train_tumor, train_notumor, validation_tumor, validati
     )
     notumor_augmented = train_notumor.map(
         lambda img, lab: process_images(img, lab, 'preprocess_and_augment')
-    ).repeat(4)
+    ).repeat(5)
 
     final_tumor_train = tumor_original.concatenate(tumor_augmented)
     final_notumor_train = notumor_original.concatenate(notumor_augmented)
