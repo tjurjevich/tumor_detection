@@ -1,0 +1,63 @@
+#main #main-header {
+    text-align: center;
+}
+
+#main #main-subheader {
+    padding-top: 1%;
+    padding-bottom: 2%;
+}
+
+#main #image-select-div {
+    text-align: center;
+}
+
+#main #input-div #input-info-display {
+    display: flex;
+    justify-content: center;
+    gap: 5%;
+    text-align: center;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+#main #input-div #input-info-display #input-filename {
+    border: 1px solid black;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+#main #input-div #input-info-display #input-filename-header {
+    text-decoration: underline;
+}
+
+#main #input-div #input-info-display #input-image-label {
+    border: 1px solid black;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+#main #input-div #input-info-display #input-image-label-header {
+    text-decoration: underline;
+}
+
+#main #input-div #input-image-display{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2%;
+}
+
+#main #prediction-div #prediction-pct {
+    display: none;
+}
+
+#main #prediction-div:hover #prediction-text {
+    display: none;
+}
+
+#main #prediction-div:hover #prediction-pct {
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}

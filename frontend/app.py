@@ -10,8 +10,10 @@ model = load_model(model_path = 'saved_models/custom_model.keras')
 
 def parse_image_content(content, filename, true_label):
     return html.Div([
-        html.H5(f'File name: {filename}'),
-        html.H5(f'True label: {true_label}'),
+        html.H5(filename)
+    ]), html.Div([
+        html.H5(true_label)
+    ]), html.Div([
         html.Img(src=content)
     ])
 
@@ -32,24 +34,51 @@ app.layout = html.Div([
         html.H1("Tumor Classification", id = "main-header")
     ]),
 
-    dcc.Upload([
-        html.Button('Select an Image')
-    ], id = 'image-select'),
+    html.Div([
+        html.H4("This tumor classification model behind these predictions was constructed entirely from scratch, utilizing numerous blocks constructed of dense, convolutional, and pooling layers. The model was defined using the TensorFlow framework, and trained with multiple callbacks to both minimize overfitting and initiate fine-tuning of model weights. Held-out validation data was used during the model training phase, in which accuracy and recall capped out around 99%+.", id = "main-subheader")
+    ]),
 
-    html.Div(id='image-display'), 
+    html.Div([
+        dcc.Upload(
+            [html.Button('Select an Image')], id = 'image-select-button'
+        )
+    ], id = 'image-select-div'),
 
-    html.Div(id = 'prediction-text')
-])
+    html.Div([
+        #image details
+        html.Div([
+            html.Div([
+                html.Div(html.H4('File Name'), id = 'input-filename-header'), 
+                html.Div(id = 'input-filename-text')
+            ], id = 'input-filename'),
+            html.Div(),
+            html.Div([
+                html.Div(html.H4('True Label'), id = 'input-image-label-header'), 
+                html.Div(id = 'input-image-label-text')
+            ], id = 'input-image-label'),
+        ], id = 'input-info-display'),
+        # image
+        html.Div(id = 'input-image-display')
+    ], id = 'input-div'),
+
+    html.Div([ 
+        html.Div(id = 'prediction-text'),
+        html.Div(id = 'prediction-pct')
+    ], id = 'prediction-div')
+    
+], id = 'main')
 
 # callback which will update display with selected photo, photo name, and label
 @app.callback(
-    Output('image-display', 'children'),
-    Input('image-select', 'contents'),
-    Input('image-select', 'filename')
+    Output('input-filename-text', 'children'),
+    Output('input-image-label-text', 'children'),
+    Output('input-image-display', 'children'),
+    Input('image-select-button', 'contents'),
+    Input('image-select-button', 'filename')
 )
 def display_selected_image(content, filename):
     if content is None and filename is None:
-        return []
+        return html.Div('N/A'), html.Div('N/A'), None
     else:
         true_label = grab_true_image_label(filename = filename)
         return parse_image_content(content = content, filename = filename, true_label = true_label)
@@ -57,22 +86,26 @@ def display_selected_image(content, filename):
 # callback which will make actual prediction with selected photo
 @app.callback(
     Output('prediction-text','children'),
-    Input('image-select', 'contents')
+    Output('prediction-pct', 'children'),
+    Output('prediction-text','style'),
+    Output('prediction-div','style'),
+    Input('image-select-button', 'contents')
 )
 def predict_label(contents):
     if contents is None:
-        return []
+        return None, None, None, None
     else:
         content_type, content_string = contents.split(',')
         decoded = base64.b64decode(content_string)
-        img = Image.open(io.BytesIO(decoded))
+        img = Image.open(io.BytesIO(decoded)).convert("RGB")
         img_array = np.array(img)
         processed_img_array = process_test_image(method = 'array', img_height = 256, img_width = 256, img_array = img_array)
-        text = make_prediction(model = model, image = processed_img_array)
-        return text
+        text, num = make_prediction(model = model, image = processed_img_array)
+        if text == 'Tumor detected':
+            return html.Span([text, html.Br(), html.I('(hover here to display tumor probability)')]), f'{num}%', {'color':'red', 'fontWeight':'bold', 'textAlign':'center'}, {'display':'flex', 'textAlign':'center', 'justify-content':'center','align-items':'center','height': '40px', 'marginLeft':'20%', 'marginRight':'20%', 'marginTop':'2%', 'border':'1px solid darkgrey', 'borderRadius':'3px','backgroundColor':'#FFCCCC'}
+        else:
+            return html.Span([text, html.Br(), html.I('(hover here to display tumor probability)')]), f'{num}%', {'color':'green', 'fontWeight':'bold', 'textAlign':'center'}, {'display':'flex', 'textAlign':'center', 'justify-content':'center','align-items':'center','height': '40px', 'marginLeft':'20%', 'marginRight':'20%', 'marginTop':'2%', 'border':'1px solid darkgrey', 'borderRadius':'3px','backgroundColor':'#90EE90'}
 
         
-
-
 if __name__ == "__main__":
     app.run(debug = True)

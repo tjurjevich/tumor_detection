@@ -22,17 +22,13 @@ def load_model(model_path):
     )
     return mod
 
-# Makes prediction for the selected image
+# Makes prediction for the selected image. Return tumor/no tumor label, as well as tumor prediction percentage
 def make_prediction(model, image):
     prediction = model.predict(image, verbose = 0)
-    if prediction < 1e-4:
-        return 'No tumor detected (<0.01%)'
-    if prediction >= 1e-4 and prediction < 0.5:
-        return f'No tumor detected ({round((prediction[0][0])*100, 3)}%)'
-    if prediction >= 0.5 and prediction < 0.9999:
-        return f'Tumor detected ({round((prediction[0][0])*100, 3)}%)'
-    if prediction >= 0.9999:
-        return f'Tumor detected (>99.99%)'
+    if prediction[0][0] < 0.5:
+        return 'No tumor detected', round((prediction[0][0])*100, 3)
+    else:
+        return 'Tumor detected', round((prediction[0][0])*100, 3)
     
 # img = process_test_image('data/testing/tumor/Tr-me_0010.jpg', 256, 256)
 # mod = load_model('saved_models/custom_model.keras')
