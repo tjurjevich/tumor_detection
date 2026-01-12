@@ -11,13 +11,13 @@ cd tumor_detection
 2. Create a local environment in the new repo directory, then activate.  
 **Windows**  
 ```bash
-python -m venv env
+[python/python3] -m venv env
 env\Scripts\activate
 ```
 
 **macOS/Linux**  
 ```bash
-python -m venv env
+[python/python3] -m venv env
 source env/bin/activate
 ```  
 
@@ -29,7 +29,7 @@ pip install -r requirements.txt
 4. Ensure parameters within `config/params.yaml` are complete and valid (see comments within yaml file for further instructions).  
 
 5. Model training  
-There are two model types that are capable of being developed: an entirely custom model, or a transfer learning model.  
+There are two model types that are capable of being developed: an entirely custom model, or a transfer learning model. To go the custom model route, you need to ensure all parameters have acceptable values within the `model['custom']` config file. Conversely, all model parameters need to be acceptable within `model['transfer_learning']` to train that model type. 
 
 **Custom model base architecture**  
 Rescale  
@@ -64,3 +64,48 @@ Dense
 Dropout  
 ↓  
 Classifier (Dense)  
+
+**To start model training...** 
+
+*custom*
+```bash
+[python/python3] -m src.training.custom_model
+```  
+
+*transfer learning*  
+```bash
+[python/python3] -m src.training.transfer_learning
+```  
+
+Preprocessing and model training logs are output to `logs/` subdirectory. Non-model training information is written to [custom_model or transfer_learning_model]_general_logs_[current date].log. Epoch level metrics and losses are written into [custom_model or transfer_learning_model]_training_logs_[current date].csv.  
+
+**Note**: expect a custom model training to take approximately 15 minutes with current parameters and data volume. Expect a transfer learning model to take approximately 1 hour with current parameters and data volume.  
+
+6. Frontend Dash app  
+
+Once model training is completed successfully, the model is written to disk in the local directory (`./saved_models/`). This model will be used for the front end Dash app for demonstration purposes.  
+
+The current Dash app (`./frontend/app.py`) is a minimal front end application used to display basic information about the test image(s), such as image name, image label, the rendered image, and the model's prediction. The source code can be much improved to add more beneficial and rich content for the task at hand.  
+
+**To launch the Dash app...**  
+```bash
+[python/python3] -m frontend.app
+```  
+
+The UI asks the user to select an image from the following directory: `./data/testing/[tumor/notumor]`. In the event an image outside of these directories is chosen, the image label will simply be listed 'Unknown'.  
+
+**(Optional) To containerize the Dash app...**  
+
+```bash
+docker build -t tumor-detection .
+docker run -p 8050:8050 tumor-detection 
+```  
+
+Then, navigate to `http://localhost:8050` to test out the containerized version of your model directory.  
+
+
+# Additional information  
+
+- Data used for model training, validation, and testing was downloaded from Kaggle (https://www.kaggle.com/datasets/masoudnickparvar/brain-tumor-mri-dataset). You will notice the original datasets are split into four groups (notumor, glioma, meningioma, pituitary) instead of two (tumor, notumor). Future iterations of this model could work to first identify a tumor, and then classify tumor type if one is initially detected.  
+
+- The project was developed on a 2024 MacBook Pro with M4 Pro chip, 48 GB RAM, and 512GB storage.  

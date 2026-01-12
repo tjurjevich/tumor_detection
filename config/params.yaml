@@ -1,40 +1,41 @@
 root_dir: ".." # root directory = parent directory
 
 data:
-  train_dir_notumor: "data/model/training/notumor"
-  train_dir_tumor: "data/model/training/tumor"
-  validation_dir_notumor: "data/model/validation/notumor"
-  validation_dir_tumor: "data/model/validation/tumor"
-  image_height: 256
-  image_width: 256
-  color_mode: "rgb"
+  train_dir_notumor: "data/model/training/notumor" # subdirectory used for no tumor training data
+  train_dir_tumor: "data/model/training/tumor"  # subdirectory used for tumor training data
+  validation_dir_notumor: "data/model/validation/notumor" # subdirectory used for no tumor validation data
+  validation_dir_tumor: "data/model/validation/tumor" # subdirectory used for tumor validation data
+  image_height: 256 # resized image height (some base models will require a specific configuration)
+  image_width: 256  # resized image width (some base models will require a specific configuration)
+  color_mode: "rgb" # either 'rgb' (all colors) or 'grayscale'
 
 model:
   custom:
-    conv_filters: [16, 32]
-    dropout_pct: 0.3
-    dense_units: [128, 64]
-    pool_type: "max"
-    saved_model_dir: "saved_models/custom_model.keras"
+    conv_filters: [16, 32]  # either a single int, or a list of ints
+    dropout_pct: 0.3  # float
+    dense_units: [128, 64]  # either a single int, or a list of ints
+    pool_type: "max"  # either 'max' or 'avg'
+    saved_model_dir: "saved_models/custom_model.keras"  # saved model directory
   transfer_learning:
-    base_model: "densenet"
-    pool_type: "max"
-    dropout_pct: 0.3
-    dense_units: 32
-    saved_model_dir: "saved_models/transfer_learning_model.keras"
+    base_model: "densenet"  # currently, only 'densenet' or 'resnet'
+    pool_type: "max"  # either 'max' or 'avg'
+    dropout_pct: 0.3  # float
+    dense_units: 32 # either a single int, or a list of ints
+    saved_model_dir: "saved_models/transfer_learning_model.keras" # saved model directory
 
+# training params (same params applied to either custom model or transfer learning model)
 training:
-  epochs: 100
-  batch_size: 64
-  optimizer: "adam"
-  loss_fn: "binary_crossentropy"
-  metrics: ["accuracy","recall","precision"]
+  epochs: 100 # total epochs for training
+  batch_size: 64  # image batch size
+  optimizer: "adam" # training optimizer (visit https://www.tensorflow.org/api_docs/python/tf/keras/optimizers for more options)
+  loss_fn: "binary_crossentropy"  # loss function (visit https://www.tensorflow.org/api_docs/python/tf/keras/losses for more options)
+  metrics: ["accuracy","recall","precision"] # metrics to track (visit https://www.tensorflow.org/api_docs/python/tf/keras/metrics for more options)
   callbacks:
     lr_plateau:
-      min_lr: 0.000001
-      patience: 3
-      factor: 0.1
+      min_lr: 0.000001  # minimum learning rate
+      patience: 3 # will apply rate decrease after this number of epochs with no improvement
+      factor: 0.1 # LR decrease to apply
     early_stopping:
-      min_delta: 0.001
-      patience: 5
-      epoch_start: 3
+      min_delta: 0.001  # loss needs to improve this amount every _ epochs
+      patience: 5 # will wait up to _ epochs for loss improvements
+      epoch_start: 3  # do not start checking until this epoch
