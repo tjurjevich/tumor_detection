@@ -14,7 +14,6 @@ def load_original_images(paths: dict, color_mode: Literal['grayscale','rgb']):
     num_train_notumor = len([file for file in os.listdir(paths['train_notumor']) if '.jpg' in file])
     num_validation_tumor = len([file for file in os.listdir(paths['validation_tumor']) if '.jpg' in file])
     num_validation_notumor = len([file for file in os.listdir(paths['validation_notumor']) if '.jpg' in file])
-    print(num_train_tumor, num_train_notumor, num_validation_tumor, num_validation_notumor)
     
     train_tumor = image_dataset_from_directory(directory = paths['train_tumor'], color_mode = color_mode, labels = [1.0]*num_train_tumor)
     train_notumor = image_dataset_from_directory(directory = paths['train_notumor'], color_mode = color_mode, labels = [0.0]*num_train_notumor)

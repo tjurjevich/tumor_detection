@@ -1,9 +1,14 @@
+
 #main #main-header {
     text-align: center;
 }
 
 #main #main-subheader {
     padding-top: 1%;
+    padding-bottom: 2%;
+}
+
+#main #instruction-block {
     padding-bottom: 2%;
 }
 

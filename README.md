@@ -101,7 +101,12 @@ docker build -t tumor-detection .
 docker run -p 8050:8050 tumor-detection 
 ```  
 
+
 Then, navigate to `http://localhost:8050` to test out the containerized version of your model directory.  
+
+!(frontend/screenshots/unselected-image.png "UI display when Dash app is initially launched.")  
+!(frontend/screenshots/image-selection.png "To make a prediction on an image, click 'Select an Image', and choose image from project directory.")  
+!(frontend/screenshots/prediction-output.png "Observe model's prediction just below the rendered image.")  
 
 
 # Additional information  

@@ -6,8 +6,10 @@ from PIL import Image
 import io
 import numpy as np
 
+# load model. model path is hardcoded, and will need to change for transfer learning model
 model = load_model(model_path = 'saved_models/custom_model.keras')
 
+# rearranges various pieces of info in Div format for a selected image
 def parse_image_content(content, filename, true_label):
     return html.Div([
         html.H5(filename)
@@ -17,6 +19,7 @@ def parse_image_content(content, filename, true_label):
         html.Img(src=content)
     ])
 
+# determine whether the image is actually a tumor or not
 def grab_true_image_label(filename):
     if os.path.exists(os.path.join('./data/testing/tumor', filename)):
         return 'Tumor'
@@ -26,8 +29,8 @@ def grab_true_image_label(filename):
         return 'Unknown'
 
 
+# initiate app and define layout
 app = Dash(__name__)
-
 app.layout = html.Div([
     # Header
     html.Div([
@@ -35,8 +38,19 @@ app.layout = html.Div([
     ]),
 
     html.Div([
-        html.H4("This tumor classification model behind these predictions was constructed entirely from scratch, utilizing numerous blocks constructed of dense, convolutional, and pooling layers. The model was defined using the TensorFlow framework, and trained with multiple callbacks to both minimize overfitting and initiate fine-tuning of model weights. Held-out validation data was used during the model training phase, in which accuracy and recall capped out around 99%+.", id = "main-subheader")
+        html.H4("The tumor classification model behind these predictions was constructed entirely from scratch, \
+                utilizing numerous blocks constructed of dense, convolutional, and pooling layers. The model was \
+                defined using the TensorFlow framework, and trained with multiple callbacks to both minimize overfitting \
+                and initiate fine-tuning of model weights. Held-out validation data was used during the model training phase, \
+                in which accuracy and recall capped out around 99%+."
+                , id = "main-subheader")
     ]),
+
+    html.Div([
+        html.Span(html.I('To make a prediction, simply select an image from either the data/tumor or data/notumor directory. \
+                         You are allowed to select a JPEG/JPG image outside of these directories, however, the interface cannot \
+                         display the true label of the image.'))
+    ], id = 'instruction-block'),
 
     html.Div([
         dcc.Upload(
@@ -108,4 +122,4 @@ def predict_label(contents):
 
         
 if __name__ == "__main__":
-    app.run(host = "0.0.0.0")
+    app.run(host = "0.0.0.0", port = 8050)
