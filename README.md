@@ -1,7 +1,9 @@
-# Summary
+# Summary  
+In recent years, computer vision has consistently been a topic of interest within the machine learning and artificial intelligence communities. One particular application of image classification and detection lives within the healthcare sector. Early detection of cancer can save lives, especially in aggressive forms of brain cancer as demonstrated in this project. Although this model should **not** be used as professional medical interpreter, it provides a structured virtual "playground" for data scientists who are specifically interested in deep learning as it relates to healthcare.  
 
-# End-to-End Setup
+This project was completed in an effort to further understand standard DevOps practices, paramaterized model training, convolutional neural network architecture, transfer learning & fine-tuning, and source code containerization. 
 
+# End-to-End Setup  
 1. Download this repository to your local machine, and set as your current directory.  
 ```bash
 git clone https://github.com/tjurjevich/tumor_detection.git
